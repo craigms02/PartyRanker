@@ -2,7 +2,7 @@
 <%@ page import="com.endicott.edu.xxxxmodels.CollegeModel" --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<title>Endicott Unhappiness Project</title>
+<title>Endicott Party Ranker</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href = "resources/style.css">
 <!-- Latest compiled and minified CSS -->
@@ -39,8 +39,8 @@
 
   <form action="welcome" method="post">
   <div class="jumbotron">
-    <h1>Endicott Unhappiness Project</h1>
-    <p>The art of being unhappy.</p>
+    <h1>Party Ranker</h1>
+    <p>Where should you be this weekend.</p>
     <div class="form-group">
       <input type="text" name="username" class="form-control" id="username" placeholder="User ID or Be Anonymous below. ">
     </div>
