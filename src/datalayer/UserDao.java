@@ -1,10 +1,8 @@
 package datalayer;
 
-import models.StoryModel;
 import models.UserModel;
 
 import java.io.*;
-import java.util.ArrayList;
 
 public class UserDao {
 

@@ -1,9 +1,10 @@
 <%@ page import="models.PartyModel" %>
 <%@ page import="models.UserModel" %>
+<%@ page import="datalayer.LikeDao" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
-<title>Unhappy parties</title>
+<title>Future Parties</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
@@ -35,12 +36,17 @@
     if (parties == null) {
         parties = new PartyModel[0];
     }
+    int numberComments = 0;
+    for (int i = parties.length - 1; i >= 0; i--) {
+        if (parties[i].getCommentOnPartyID() != 0)
+            numberComments++;
+    }
 %>
 <p></p>
 <p></p>
 <div class="container">
 
-    <form action="viewStories" method="post">
+    <form action="viewParties" method="post">
 
         <!-- Navigation Bar -->
         <nav class="navbar navbar-inverse">
@@ -54,9 +60,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="viewStories">parties</a></li>
-                        <li class="inactive"><a href="viewStories">Ratings</a></li>
-                        <li class="inactive"><a href=""><%=user.getUsername()%></a></li>
+                        <li class="active"><a href="viewParties">Future Parties</a></li>
+                        <li class="inactive"><a href="viewpartiespassed">Past Parties</a></li>
+                        <li class="inactive"><a href=""><%=user.getUsername()%>'s Party Info</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="welcome"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -65,22 +71,26 @@
             </div>
         </nav>
 
-        <!-- Display the jumbotron -->
-        <div class="jumbotron">
-            <h1>Oh No!</h1>
-        </div>
 
         <!-- Display a list of parties -->
         <div class="container">
             <div class="row">
                 <div class="well well-sm">
-                    <h3><p class="text-primary"><%=parties.length%> parties</h3>
+                    <h3><p class="text-primary"><%=parties.length - numberComments%> Parties</h3>
                     <div class="pre-scrollable">
                         <ul class="list-group">
                             <%
                                 for (int i = parties.length - 1; i >= 0; i--) {
+                                    if (parties[i].getCommentOnPartyID() != 0)
+                                        continue;
+
+
                             %>
-                            <li class="list-group-item">[<%=parties[i].getUsername()%>] - <%=parties[i].getStory()%>
+                            <li class="list-group-item">[<%=parties[i].getUsername()%>] - <%=parties[i].getParty()%>
+                                <input type="submit" class="btn btn-info" name="<%=parties[i].getPartyId()%>" value="Delete">
+                                <input type="submit" class="btn btn-info" name="<%=parties[i].getPartyId()%>" value="View">
+                                <input type="submit" class="btn btn-info" name="<%=parties[i].getPartyId()%>" value="I'm going!">
+                                Expected Attendance: <%=LikeDao.getNumberOfLikes(parties[i].getPartyId())%>
                             </li>
                             <%
                                 }
@@ -96,10 +106,10 @@
             <div class="row">
                 <div class="well well-sm">
                 <div class="form-group">
-                    <label for="storyText">Tell your party</label>
+                    <label for="partyText">Details about your party</label>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="storyText" name="storyText"
-                               placeholder="What's your party?">
+                        <input type="text" class="form-control" id="partyText" name="partyText"
+                               placeholder="Ex. Woodside 6: 05/10/18">
                     </div>
                     <!-- Button -->
                     <input type="submit" class="btn btn-info" name="submitButton" value="Submit">

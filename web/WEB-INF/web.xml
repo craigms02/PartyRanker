@@ -8,13 +8,24 @@
     </welcome-file-list>
 
     <servlet>
-        <servlet-name>viewStoriesServlet</servlet-name>
-        <servlet-class>ui.ViewStoriesServlet</servlet-class>
+        <servlet-name>viewPartyServlet</servlet-name>
+        <servlet-class>ui.ViewPartyServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>viewStoriesServlet</servlet-name>
-        <url-pattern>/viewStories</url-pattern>
+        <servlet-name>viewPartyServlet</servlet-name>
+        <url-pattern>/viewParty</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>viewPartiesServlet</servlet-name>
+        <servlet-class>ui.ViewPartiesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>viewPartiesServlet</servlet-name>
+        <url-pattern>/viewParties</url-pattern>
+    </servlet-mapping>
+
 
     <servlet>
         <servlet-name>welcomeServlet</servlet-name>

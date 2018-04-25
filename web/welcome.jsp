@@ -1,5 +1,4 @@
-<%--@ page import="com.endicott.edu.ui.UiMessage" %>
-<%@ page import="com.endicott.edu.xxxxmodels.CollegeModel" --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <title>Endicott Party Ranker</title>
@@ -16,23 +15,7 @@
 
 </head>
 <body>
-<%--
-  UiMessage msg = (UiMessage) request.getAttribute("message");
-  if (msg == null) {
-      msg = new UiMessage();
-      msg.setMessage("");
-  }
-  CollegeModel college = (CollegeModel) request.getAttribute("college");
-  if (college == null) {
-      college = new CollegeModel();
-  }
-  String hostOfSim = (String) request.getAttribute("host");
-  if (hostOfSim == null) {
-    hostOfSim = "http://localhost:8080/enccollegesim/";
-  } else {
-    hostOfSim = hostOfSim;
-  }
---%>
+
 <p></p>
 <p></p>
 <div class="container">
@@ -42,22 +25,16 @@
     <h1>Party Ranker</h1>
     <p>Where should you be this weekend.</p>
     <div class="form-group">
-      <input type="text" name="username" class="form-control" id="username" placeholder="User ID or Be Anonymous below. ">
+      <input type="text" name="username" class="form-control" id="username" placeholder="Enter Username ">
+      <input type="password" name="password" class="form-control" id="password" placeholder="Enter Password ">
     </div>
     <div class="container">
       <input type="submit" class="btn btn-info" name="button" value="Log In">
       <input type="submit" class="btn btn-info" name="button" value="Create Account">
-      <input type="submit" class="btn btn-info" name="button" value="Be Anonymous">
     </div>
   </div>
 
 <div class="container">
-  <!-- Display a message if defined -->
-  <%-- if (msg.getMessage().length() > 0) { %>
-  <div class="alert alert-danger">
-    <strong>Info</strong> <%=msg.getMessage()%>
-  </div>
-  <% } --%>
 
 </form>
 </div>

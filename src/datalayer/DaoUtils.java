@@ -13,7 +13,7 @@ public class DaoUtils {
     }
 
     static private String getStorageDirectory() {
-        String collegeDir = System.getenv("SystemDrive")+ File.separator +"webAppStories";
+        String collegeDir = System.getenv("SystemDrive")+ File.separator +"webAppParties";
         new File(collegeDir).mkdirs();
         return collegeDir;
     }

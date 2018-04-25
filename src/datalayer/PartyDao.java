@@ -57,6 +57,27 @@ public class PartyDao {
     /**
      * Return all saved parties.
      */
+
+    public static ArrayList<PartyModel> getPartiesThatAreComments(int commentsOnPartyId) {
+        ArrayList<PartyModel> parties = new ArrayList<>();
+        String dir = DaoUtils.storageDirectoryName();
+        File folder = new File(dir);
+        File[] listOfFiles = folder.listFiles();
+
+        for(int i = 0; i < listOfFiles.length; i++){
+            if(listOfFiles[i].getName().startsWith("party") &&
+                    listOfFiles[i].getName().endsWith(".txt")){
+                PartyModel party = getParty(listOfFiles[i]);
+                if (party.getCommentOnPartyID() == commentsOnPartyId) {
+                parties.add(getParty(listOfFiles[i]));
+            }
+        }
+    }
+        return parties;
+    }
+
+
+
     public static ArrayList<PartyModel> getParties() {
         ArrayList<PartyModel> Parties = new ArrayList<>();
         String dir = DaoUtils.storageDirectoryName();
@@ -131,7 +152,7 @@ public class PartyDao {
         ArrayList<PartyModel> parties = dao.getParties();
         assert(parties != null && parties.size() >= 5);
 
-        //dao.deleteParty(PartyId);
+        dao.deleteParty(partyId);
     }
 
 }

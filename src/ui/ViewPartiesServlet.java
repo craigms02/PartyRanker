@@ -1,6 +1,7 @@
 
 package ui;
 
+import datalayer.LikeDao;
 import datalayer.PartyDao;
 import datalayer.UniqueIdDao;
 import datalayer.UserDao;
@@ -16,14 +17,19 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.logging.Logger;
 
-
-
-public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
+public class ViewPartiesServlet extends javax.servlet.http.HttpServlet {
     private Logger logger = Logger.getLogger(getClass().getName());
 
+    /**
+     * The post method is called by the browser when the user presses the button
+     *
+     * @param request The request has info on filled in fields and button presses.
+     * @param response We use this to give the browser a response.
+     * @throws ServletException
+     * @throws IOException
+     */
 
     String buttonValue;
-
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logRequestParameters(request);  // Just to help with debugging.
@@ -31,29 +37,32 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
         // Get data from the request
         UserModel user = loadUserFromRequest(request);
 
-        // Delete a party
-        String viewButtonName = getButtonNameGivenValue(request, buttonValue = "View");
+        // View a party
+        String viewButtonName = getButtonNameGivenValue(request, "View");
         if (viewButtonName != null) {
             int PartyId = Integer.parseInt(viewButtonName);
             handleViewButton(request, response, user, PartyId);
+            return;
         }
 
         String partyText=request.getParameter("partyText");
         String buttonValue = request.getParameter("submitButton");
 
 
-        // If submit was hit, add a comment.
-       // if (buttonValue != null && buttonValue.equals("Submit")){
-       //     addComment(user, partyText, PartyId);
-       // }
-        String partyIdAsString = getButtonNameGivenValue(request, buttonValue = "Submit");
-        if (partyIdAsString != null) {
-            int PartyId = Integer.parseInt(partyIdAsString);
-            addComment(user, partyText, PartyId);
+
+        // If submit was hit, add party.
+        if (buttonValue != null && buttonValue.equals("Submit")){
+            addParty(user,partyText);
+        }
+        // If like was hit, like the party
+        String likeButtonName = getButtonNameGivenValue(request, "I'm going!");
+        if (likeButtonName != null) {
+            int partyId = Integer.parseInt(likeButtonName);
+            likeParty(user, partyId);
         }
 
         // Delete a party
-        partyIdAsString = getButtonNameGivenValue(request, buttonValue = "Delete");
+        String partyIdAsString = getButtonNameGivenValue(request, buttonValue = "Delete");
         if (partyIdAsString != null) {
             int PartyId = Integer.parseInt(partyIdAsString);
             PartyDao.deleteParty(PartyId);
@@ -69,19 +78,21 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
 
     }
 
-//    Integer partyIdAsInteger = (Integer) request.getSession().getAttribute("partyid");
-//
-//    int partyBeingDisplayedId = 0;
-//    if (partyIdAsInteger != null){
-//        partyBeingDisplayedId = partyIdAsInteger.intValue();
-    //}
+    private void likeParty(UserModel user, int partyId) {
+        LikeDao.saveLike(partyId, user.getUsername());
+    }
+
     private void handleViewButton(HttpServletRequest request, HttpServletResponse response, UserModel user, int partyId) throws ServletException, IOException {
         PartyModel party = PartyDao.getParty(partyId);
+
+        request.getSession().setAttribute("partyid", partyId);
 
         //load any data we need into the request
         request.setAttribute("user", user);
         request.setAttribute("party", party);
-        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewparty.jsp");
+        loadCommentsOnPartyIntoRequest(request, partyId);
+
+        RequestDispatcher dispatcher=request.getRequestDispatcher("/viewParty");
         dispatcher.forward(request, response);
 
     }
@@ -91,7 +102,7 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
      * Grab the username from the request and create a user model.
      */
     private UserModel loadUserFromRequest(HttpServletRequest request) {
-        String username=request.getParameter("username");
+        String username = (String) request.getSession().getAttribute("username");
         UserModel user = UserDao.getUser(username);
 
         // If there is no user for some weird reason, just use anonymous.
@@ -99,7 +110,7 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
             user = new UserModel();
             user.setUsername("anonymous");
         }
-
+        request.setAttribute("user", user);
         return user;
     }
 
@@ -108,12 +119,13 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
      *
      * @param request
      * @param response
-     * @throws ServletException
+     * @throws javax.servlet.ServletException
      * @throws IOException
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, javax.servlet.http.HttpServletResponse response) throws javax.servlet.ServletException, IOException {
         // Before we go the page to display the stories, we need to get the stories.
         // And then shove the stories in to the request.
+        loadUserFromRequest(request);
         loadPartiesIntoRequest(request);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/viewparties.jsp");
         dispatcher.forward(request, response);
@@ -132,13 +144,18 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
         PartyModel[] stories = storiesList.toArray(new PartyModel[storiesList.size()]);
         request.setAttribute("parties", stories);
     }
+    private void loadCommentsOnPartyIntoRequest(HttpServletRequest request, int partyId) {
+        ArrayList<PartyModel> storiesList = PartyDao.getPartiesThatAreComments(partyId);
 
+        PartyModel[] stories = storiesList.toArray(new PartyModel[storiesList.size()]);
+        request.setAttribute("partycomments", stories);
+    }
     /**
-     * Save a story.
+     * Save a party.
      */
-    private void addComment(UserModel user, String partyText, int commentOnPartyId) {
+    private void addParty(UserModel user, String partyText) {
         if (partyText != null && partyText.length() > 0 && user != null) {
-            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), commentOnPartyId);
+            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), 0);
         }
     }
 

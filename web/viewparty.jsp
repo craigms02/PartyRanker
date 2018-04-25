@@ -1,9 +1,10 @@
-<%@ page import="models.StoryModel" %>
+<%@ page import="datalayer.LikeDao" %>
+<%@ page import="models.PartyModel" %>
 <%@ page import="models.UserModel" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
-<title>Unhappy Stories</title>
+<title>Party</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="resources/style.css">
 <!-- Latest compiled and minified CSS -->
@@ -31,16 +32,22 @@
         user.setUsername("anonymous");
     }
 
-    StoryModel stories[] = (StoryModel[]) request.getAttribute("stories");
-    if (stories == null) {
-        stories = new StoryModel[0];
+    PartyModel party = (PartyModel) request.getAttribute("party");
+    if (party == null) {
+        party = new PartyModel();
+        party.setParty("unavailable.");
+    }
+
+    PartyModel comments[] = (PartyModel[]) request.getAttribute("partycomments");
+    if (comments == null) {
+        comments = new PartyModel[0];
     }
 %>
 <p></p>
 <p></p>
 <div class="container">
 
-    <form action="viewStories" method="post">
+    <form action="viewParty" method="post">
 
         <!-- Navigation Bar -->
         <nav class="navbar navbar-inverse">
@@ -54,9 +61,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="viewStories">Stories</a></li>
-                        <li class="inactive"><a href="viewStories">Ratings</a></li>
-                        <li class="inactive"><a href=""><%=user.getUsername()%></a></li>
+                        <li class="active"><a href="viewParties">Future Parties</a></li>
+                        <li class="inactive"><a href="viewpartiespassed">Past Parties</a></li>
+                        <li class="inactive"><a href=""><%=user.getUsername()%>'s Party Info</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><a href="welcome"><span class="glyphicon glyphicon-log-out"></span>Exit</a></li>
@@ -65,48 +72,61 @@
             </div>
         </nav>
 
-        <!-- Display the jumbotron -->
-        <div class="jumbotron">
-            <h1>Oh No!</h1>
-        </div>
 
-        <!-- Display a list of stories -->
+        <!-- Display a Party -->
         <div class="container">
             <div class="row">
                 <div class="well well-sm">
-                    <h3><p class="text-primary"><%=stories.length%> Stories</h3>
+                    <h2><p class="text-primary">Party thrown by <%=party.getUsername()%> at <%=party.getParty()%>
+                    </h2>
                     <div class="pre-scrollable">
-                        <ul class="list-group">
-                            <%
-                                for (int i = stories.length - 1; i >= 0; i--) {
-                            %>
-                            <li class="list-group-item">[<%=stories[i].getUsername()%>] - <%=stories[i].getStory()%>
-                            </li>
-                            <%
-                                }
-                            %>
-                        </ul>
-                    </div>
+
                 </div>
             </div>
         </div>
 
-        <!-- Input for a new story -->
+<!-- view comments -->
+            <div class="container">
+                <div class="row">
+                    <div class="well well-sm">
+                        <h4><p class="text-primary">What people are saying about this party:
+                        </h4>
+                        <div class="pre-scrollable">
+                            <ul class="list-group">
+                                <%
+                                    for (int i = comments.length - 1; i >= 0; i--) {
+                                        if (comments[i].getCommentOnPartyID() != party.getPartyId())
+                                            continue;
+
+                                %>
+                                <li class="list-group-item">[<%=comments[i].getUsername()%>] - <%=comments[i].getParty()%>
+                                </li>
+                                <%
+                                    }
+                                %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        <!-- Input for a new comment and Delete button -->
         <div class="container">
             <div class="row">
                 <div class="well well-sm">
-                <div class="form-group">
-                    <label for="storyText">Tell your story</label>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="storyText" name="storyText"
-                               placeholder="What's your story?">
-                    </div>
-                    <!-- Button -->
-                    <input type="submit" class="btn btn-info" name="submitButton" value="Submit">
-                </div>
+                        <label for="partyText">Thoughts on the party?</label>
+                        <div class="form-group">
+                        <input type = "text" class="form-control" id="partyText" name="partyText"
+                                placeholder="Any comments to add?">
+                            </div>
+                    <input type="submit" class="btn btn-info" name="<%=party.getPartyId()%>" value="Submit">
                 </div>
             </div>
         </div>
+
 
 
         <!-- This is a screet input to the post!  Acts as if the user
