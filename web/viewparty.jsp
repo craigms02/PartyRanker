@@ -77,7 +77,11 @@
         <div class="container">
             <div class="row">
                 <div class="well well-sm">
-                    <h2><p class="text-primary">Party thrown by <%=party.getUsername()%> at <%=party.getParty()%>
+                    <h2><p class="text-primary">Party for <%=party.getParty()%> thrown by <%=party.getUsername()%>
+                    </h2>
+                    <h2><p class="text-primary">Location: <%=party.getLocation()%>
+                    </h2>
+                    <h2><p class="text-primary">Date: <%=party.getDate()%>
                     </h2>
                     <div class="pre-scrollable">
 

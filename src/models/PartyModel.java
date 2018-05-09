@@ -7,6 +7,8 @@ public class PartyModel implements Serializable {
     private String party;
     private String username;
     private int commentOnPartyID;
+    private String date;
+    private String location;
 
     public int getPartyId() {
         return partyId;
@@ -38,5 +40,21 @@ public class PartyModel implements Serializable {
 
     public void setCommentOnPartyID(int commentOnPartyID) {
         this.commentOnPartyID = commentOnPartyID;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

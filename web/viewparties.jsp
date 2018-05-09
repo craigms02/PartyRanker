@@ -109,7 +109,11 @@
                     <label for="partyText">Details about your party</label>
                     <div class="form-group">
                         <input type="text" class="form-control" id="partyText" name="partyText"
-                               placeholder="Ex. Woodside 6: 05/10/18">
+                               placeholder="Title of Party Ex. Birthday Banger">
+                        <input type="text" class="form-control" id="partyDate" name="partyDate"
+                               placeholder="Date Ex. 05/10/18">
+                        <input type="text" class="form-control" id="partyLocation" name="partyLocation"
+                        placeholder="Location Ex. Woodside">
                     </div>
                     <!-- Button -->
                     <input type="submit" class="btn btn-info" name="submitButton" value="Submit">

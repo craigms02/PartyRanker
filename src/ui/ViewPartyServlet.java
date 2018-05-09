@@ -138,7 +138,7 @@ public class ViewPartyServlet extends javax.servlet.http.HttpServlet {
      */
     private void addComment(UserModel user, String partyText, int commentOnPartyId) {
         if (partyText != null && partyText.length() > 0 && user != null) {
-            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), commentOnPartyId);
+            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), commentOnPartyId,"","");
         }
     }
 

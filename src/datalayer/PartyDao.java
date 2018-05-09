@@ -45,10 +45,12 @@ public class PartyDao {
      * Given a party ID and party text, make a party model
      * and save it.
      */
-    public static void saveParty(int PartyId, String PartyText, String username, int commentOnPartyId) {
+    public static void saveParty(int PartyId, String PartyText, String username, int commentOnPartyId, String partyDate, String partyLocation) {
         PartyModel Party = new PartyModel();
         Party.setPartyId(UniqueIdDao.getID());
         Party.setParty(PartyText);
+        Party.setDate(partyDate);
+        Party.setLocation(partyLocation);
         Party.setUsername(username);
         Party.setCommentOnPartyID(commentOnPartyId);
         saveParty(Party);

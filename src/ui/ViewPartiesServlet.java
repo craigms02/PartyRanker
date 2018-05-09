@@ -46,13 +46,15 @@ public class ViewPartiesServlet extends javax.servlet.http.HttpServlet {
         }
 
         String partyText=request.getParameter("partyText");
+        String partyDate=request.getParameter("partyDate");
+        String partyLocation=request.getParameter("partyLocation");
         String buttonValue = request.getParameter("submitButton");
 
 
 
         // If submit was hit, add party.
         if (buttonValue != null && buttonValue.equals("Submit")){
-            addParty(user,partyText);
+            addParty(user,partyText,partyDate,partyLocation);
         }
         // If like was hit, like the party
         String likeButtonName = getButtonNameGivenValue(request, "I'm going!");
@@ -153,9 +155,9 @@ public class ViewPartiesServlet extends javax.servlet.http.HttpServlet {
     /**
      * Save a party.
      */
-    private void addParty(UserModel user, String partyText) {
+    private void addParty(UserModel user, String partyText, String partyDate, String partyLocation) {
         if (partyText != null && partyText.length() > 0 && user != null) {
-            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), 0);
+            PartyDao.saveParty(UniqueIdDao.getID(), partyText, user.getUsername(), 0, partyDate, partyLocation);
         }
     }
 
